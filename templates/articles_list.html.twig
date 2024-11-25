@@ -5,18 +5,19 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PokerLand</title>
+    <title>Document</title>
 </head>
-
 <body>
-<main>
-<h1>Bienvenue sur Poker.fr</h1>
-    <!--
-<main>
-    <h2>{{ message }}</h2>
-</main>-->
 
-<p>Vous êtes majeur, bienvenue !</p>
+
+<main>
+
+    {% for article in articles %}
+        <h2>{{ article.title }}</h2>
+    {% endfor %}
+
+
 </main>
+
 </body>
 </html>
