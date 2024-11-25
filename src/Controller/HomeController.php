@@ -1,11 +1,13 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 
-        //Je créai une classe HomeController
-class HomeController extends AbstractController
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+//Je créai une classe HomeController
+// et je l'étend sur l' AbstractController
+class HomeController
 {
     #[Route('/', 'home')]
         //Je crai une méthode home qui retourne une instance de la classe Response(symfony)
