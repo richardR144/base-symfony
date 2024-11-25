@@ -22,7 +22,7 @@ class PokerController extends AbstractController
         //je récupère ma variable age à partir des infos du get de mon URL
         $age = $request->query->get('age');
 
-        if ($age >= 18){
+        if ($age <= 18){
             return $this->render('pokerAgeLegal.html.twig');
         } return $this->render('pokerAgeNonLegal.html.twig');
     }
