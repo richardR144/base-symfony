@@ -15,7 +15,14 @@ class PokerController
         // $request (get, post, email, etc)
 
     $request = Request::createFromGlobals();
-    $age = $request->query->get(key:'age');
-    return new Response(content:'Bienvenue sur le site Poker');
+        $age = $request->query->get(key:'age');
+        if ($age < 18) {
+            return new Response(content:'Vous n\'êtes pas majeur');
+        }else {
+            return new Response(content: 'Interdit aux mineurs');
+        }
+
+            return new Response(content:'Bienvenue sur le site Poker');
     }
+
 }
