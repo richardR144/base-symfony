@@ -1,11 +1,16 @@
 <?php
 namespace App\Controller;
 
-class ArticleController
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+
+class ArticleController extends AbstractController
 {
+
     #[Route('/articles', 'articles_list')]
     public function articles()
     {
+
         $articles = [
             [
                 'id' => 1,
@@ -39,5 +44,11 @@ class ArticleController
             ]
 
         ];
+
+            return $this->render('articles_list.html.twig', [
+                'articles' => $articles
+        ]);
+
     }
+
 }
