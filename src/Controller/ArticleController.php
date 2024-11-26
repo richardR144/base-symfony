@@ -52,13 +52,11 @@ class ArticleController extends AbstractController
         ]);
 
     }
-
+    //je défini une url avec une varible id, cad que le router matchera toutes les urls
+    //qui ont cette forme "/article/quelque chose", "article/5" numéro de l'article
     #[Route('/showArticle/{id}', 'showArticle')]
         public function article_show($id)
     {
-        $request = Request::createFromGlobals();
-        $id = $request->query->get('id');
-
 
         $articles = [
             [
@@ -93,7 +91,7 @@ class ArticleController extends AbstractController
             ]
 
         ];
-        //Je créai un variable qui doit contenir l'article trouvé pour l'intancié à null
+        //Je créai un variable qui doit contenir l'article trouvé à null
         $articleFound = null;
         //pour chaque article de la liste trové, je check si son id correspond à l'id récupérer de l'url
         // et si c'est bon je le stocke dans ma variable $articleFound
@@ -108,6 +106,7 @@ class ArticleController extends AbstractController
         return $this->render('article_show.html.twig', [
             'article' => $articleFound
         ]);
+        dump($showArticle); die;
     }
 }
 
