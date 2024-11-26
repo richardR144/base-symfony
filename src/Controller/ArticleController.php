@@ -53,8 +53,8 @@ class ArticleController extends AbstractController
 
     }
 
-    #[Route('/showArticle/{id}', 'showArticle', methods: ['GET'])]
-    public function showArticle()
+    #[Route('/showArticle/{id}', 'showArticle')]
+        public function article_show($id)
     {
         $request = Request::createFromGlobals();
         $id = $request->query->get('id');
