@@ -3,7 +3,10 @@
 <main>
 <section class="articles-container">
     {% for article in articles %}
-        <h2>{{ article.title }}</h2>
+            <article class="article-container">
+            <h2>{{ article.title }}</h2>
+                <a href="{{ path('article_show', {id: article.id}) }}">Voir l'article</a>
+            </article>
     {% endfor %}
 </section>
 

@@ -53,7 +53,7 @@ class ArticleController extends AbstractController
 
     }
     //je défini une url avec une varible id, cad que le router matchera toutes les urls
-    //qui ont cette forme "/article/quelque chose", "article/5" numéro de l'article
+    //qui ont cette forme "/article/quelque chose", "article/5" numéro de l'article recherché
     #[Route('/showArticle/{id}', 'showArticle')]
         public function article_show($id)
     {
@@ -106,7 +106,18 @@ class ArticleController extends AbstractController
         return $this->render('article_show.html.twig', [
             'article' => $articleFound
         ]);
-        dump($showArticle); die;
+    }
+    #[Route('/articles/search-results', 'article_search_results')]
+        // je peux utiliser le système d'instanciation automatiquement de Symfony
+        // du coup, je lui passe en paramètre le type de la méthode de la classe voulue
+        // suivie d'une variable dans laquelle je veux que symfony stocke l'instance
+        // de la classe. Ce mécanisme est appelé: "autowire"
+    public function articleSearchResults(Request $request) {
+
+        $search = $request->query->get('search');
+
+
+
     }
 }
 
