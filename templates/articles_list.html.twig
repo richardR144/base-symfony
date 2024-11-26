@@ -1,15 +1,20 @@
-{% include "partials/_header.html.twig" %}
+    {% extends "base.html.twig" %}
+    {% block metatitle %}
+        liste des articles
+    {% endblock metatitle %}
 
-<main>
-<section class="articles-container">
+    {% block main %}
+        {{ dump(articles) }}
+        <section class="articles-container">
+            <h3>Il y a {{ articles | length }} articles actuellement</h3>
     {% for article in articles %}
             <article class="article-container">
             <h2>{{ article.title }}</h2>
-                <a href="{{ path('article_show', {id: article.id}) }}">Voir l'article</a>
+                <a href="{{ path('showArticle', {id: article.id}) }}">Voir l'article</a>
             </article>
     {% endfor %}
-</section>
 
-</main>
+        </section>
 
-{% include "partials/_footer.html.twig" %}
+    {% endblock main %}
+

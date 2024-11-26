@@ -1,13 +1,11 @@
-{% include "partials/_header.html.twig" %}
+{% extends "base.html.twig" %}
+
+{% block metatitle %}
+    Accueil
+{% endblock metatitle %}
 
 
-<body>
-
-
-<h1>Yep !</h1>
-
-
-
-{% include "partials/_footer.html.twig" %}
-</body>
+{% block main %}
+    <h1>Bonjour tout le monde</h1>
+{% endblock main %}
 
