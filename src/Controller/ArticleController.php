@@ -99,7 +99,7 @@ class ArticleController extends AbstractController
         ];
         //Je créai un variable qui doit contenir l'article trouvé à null
         $articleFound = null;
-        //pour chaque article de la liste trové, je check si son id correspond à l'id récupérer de l'url
+        //pour chaque article de la liste trouvé, je check si son id correspond à l'id récupérer de l'url
         // et si c'est bon je le stocke dans ma variable $articleFound
         foreach ($articles as $article) {
             if ($article['id'] ===  $id) {
