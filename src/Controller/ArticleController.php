@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,43 +12,9 @@ class ArticleController extends AbstractController
 {
 
     #[Route('/articles', 'articles_list')]
-    public function articles(): Response
+    public function articles(ArticleRepository $articleRepository): Response
     {
-
-        $articles = [
-            [
-                'id' => 1,
-                'title' => 'Article 1',
-                'content' => 'Content of article 1',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Article 2',
-                'content' => 'Content of article 2',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Article 3',
-                'content' => 'Content of article 3',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 4,
-                'title' => 'Article 4',
-                'content' => 'Content of article 4',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ],
-            [
-                'id' => 5,
-                'title' => 'Article 5',
-                'content' => 'Content of article 5',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-            ]
-
-        ];
-
+        $articles = $articleRepository->findAll();
         return $this->render('articles_list.html.twig', [
             'articles' => $articles
         ]);
@@ -56,56 +23,9 @@ class ArticleController extends AbstractController
     //je défini une url avec une varible id, cad que le router matchera toutes les urls
     //qui ont cette forme "/article/quelque chose", "article/5" numéro de l'article recherché
     #[Route('/showArticle/{id}', 'showArticle', requirements: ['id' => '\d'])]
-        public function article_show(int $id)
+        public function article_show(int $id, ArticleRepository $articleRepository): Response
     {
-
-        $articles = [
-            [
-                'id' => 1,
-                'title' => 'Article 1',
-                'content' => 'Content of article 1',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 2,
-                'title' => 'Article 2',
-                'content' => 'Content of article 2',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 3,
-                'title' => 'Article 3',
-                'content' => 'Content of article 3',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 4,
-                'title' => 'Article 4',
-                'content' => 'Content of article 4',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ],
-            [
-                'id' => 5,
-                'title' => 'Article 5',
-                'content' => 'Content of article 5',
-                'image' => 'https://static.vecteezy.com/system/resources/thumbnails/012/176/986/small_2x/a-3d-rendering-image-of-grassed-hill-nature-scenery-png.png',
-                'createdAt' => new \DateTime('2030-01-01 00:00:00')
-            ]
-
-        ];
-        //Je créai un variable qui doit contenir l'article trouvé à null
-        $articleFound = null;
-        //pour chaque article de la liste trouvé, je check si son id correspond à l'id récupérer de l'url
-        // et si c'est bon je le stocke dans ma variable $articleFound
-        foreach ($articles as $article) {
-            if ($article['id'] ===  $id) {
-                $articleFound = $article;
-            }
-        }
+            $articleFound = $articleRepository->find($id);
 
         if (!$articleFound) {
             return $this->redirectToRoute('not_found');

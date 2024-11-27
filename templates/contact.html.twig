@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block metatitle %} Contact {% endblock metatitle %}
-
+ {% block body %}
 
 {% block main %}
 
@@ -15,7 +15,8 @@
         <label for="message"></label>
         <input type="text" name="message" placeholder="Votre message">
 
-        <button type="submit">Envoyer</button>
+        <button type="submit">Envoyer ma demande</button>
     </form>
 
 {% endblock main %}
+ {%  endblock body %}
