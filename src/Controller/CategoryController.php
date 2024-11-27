@@ -4,7 +4,7 @@
 // création automatique de mon entité Category et de son repository
 //  Ensuite, je fais: php bin/console make:migration qui permet de faire la migration
 // et ça créait une version dans migrations, j'envoie ça dans ma BDD avec: php bin/console make:migration:migrate
-// j'ai ajouté des données manuellement dans ma BDD
+// j'ai ajouté les données "manuellement" dans ma BDD
 
 namespace App\Controller;
 
@@ -17,12 +17,12 @@ class CategoryController extends AbstractController
     //je défini la route pour afficher toutes les categories
 
     #[Route(path :'/categories', name: 'categories')]
-    //je fais un autowire de category repo pour interroger ma BDD
+    //je fais un autowire de category repository pour interroger ma BDD
     public function showAllCategories(CategoryRepository $categoryRepository)
     {
         //je fais un dump("yep");die;
 
-        //je crée une variable categories qui vaut toutes les catégories trouvées dans ma BDD et ses colonnes
+        //je crée une variable categories qui sont les catégories trouvées dans ma BDD et ses colonnes
         $categories = $categoryRepository->findAll();
         return $this->render('categories.html.twig', ['categories' => $categories]);
     }
