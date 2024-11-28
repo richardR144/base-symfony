@@ -57,8 +57,8 @@ class ArticleController extends AbstractController
         // je créé une instance de l'entité Article, car c'est elle qui représente les articles dans mon application
         $article = new Article();
         // j'utilise les méthodes set pour remplir les propriétés de mon article
-        $article->setTitle(title: 'Article 5');
-        $article->setContent(content: 'contenu Article 5');
+        $article->setTitle(title: 'Article 2');
+        $article->setContent(content: 'contenu Article 2');
         $article->setImage("https://cdn.futura-sciences.com/sources/images/dossier/773/01-intro-773.jpg");
         $article->setCreatedAt(new \DateTime());
         // La variable $article contient une instance de la classe Article avec les données voulues

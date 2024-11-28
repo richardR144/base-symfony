@@ -8,7 +8,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,4 +42,20 @@ class CategoryController extends AbstractController
                 'category' => $categoryFound
             ]);
     }
+#[Route('/categories/create', 'create_category')]
+    public function createCategory(EntityManagerInterface $entityManager)
+    {
+        $category = new Category();
+        // l'id est généré automatiquement par la BDD, du coup, inutile de le déclarer
+        //je créais avec les setters les categories par le title et color
+        $category->setTitle( 'category 1');
+        $category->setColor( 'green');
+        //je pré-sauvegarde mes entity
+        $entityManager->persist($category);
+        //On réunit le tout pour l'afficher
+        $entityManager->flush();
+        //et je le redirige vers la liste des catégories
+        return $this->redirectToRoute('categories_list');
+    }
+
 }
