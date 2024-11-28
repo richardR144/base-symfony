@@ -10,32 +10,34 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class CategoryController extends AbstractController
 {
     //je défini la route pour afficher toutes les categories
 
-    #[Route(path :'/categories', name: 'categories')]
+    #[Route(path :'/categories', name: 'categories_list')]
     //je fais un autowire de category repository pour interroger ma BDD
-    public function showAllCategories(CategoryRepository $categoryRepository)
+    public function listCategories(CategoryRepository $categoryRepository):Response
     {
         //je fais un dump("yep");die;
 
         //je crée une variable categories qui sont les catégories trouvées dans ma BDD et ses colonnes
         $categories = $categoryRepository->findAll();
-        return $this->render('categories.html.twig', ['categories' => $categories]);
+        return $this->render('categories_list.html.twig', [
+            'categories' => $categories
+        ]);
     }
 
-    #[Route(path: '/category/{id}', name:'category_show', requirements:['id' => '\d+'])]
-    public function getCategoryById(CategoryRepository $categoryRepository, int $id)
+    #[Route(path: '/category/{id}', name:'show_category', requirements:['id' => '\d+'])]
+    public function showCategory(int $id, CategoryRepository $categoryRepository )
     {
         $categoryFound = $categoryRepository->find($id);
 
-        if ($categoryFound === null) {
-            return $this->render('category_show.html.twig', ['category' => $categoryFound]);
 
-        } else
-            return $this->redirectToRoute('error_404.html.twig');
+            return $this->render('category_show.html.twig', [
+                'category' => $categoryFound
+            ]);
     }
 }

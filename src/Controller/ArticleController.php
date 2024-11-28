@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 
+use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +50,33 @@ class ArticleController extends AbstractController
         return $this->render('article_search_results.html.twig', [
             'search' => $search
         ]);
+    }
+
+    #[Route('/articles/create', 'article_create')]
+    public function createArticle(EntityManagerInterface $entityManager): Response {
+        // je créé une instance de l'entité Article, car c'est elle qui représente les articles dans mon application
+        $article = new Article();
+        // j'utilise les méthodes set pour remplir les propriétés de mon article
+        $article->setTitle(title: 'Article 5');
+        $article->setContent(content: 'contenu Article 5');
+        $article->setImage("https://cdn.futura-sciences.com/sources/images/dossier/773/01-intro-773.jpg");
+        $article->setCreatedAt(new \DateTime());
+        // La variable $article contient une instance de la classe Article avec les données voulues
+        //(sauf l'id car il sera généré par la BDD)
+
+        // j'utilise l'instance de la classe EntityManager. C'est cette classe qui permet de sauver ou supprimer
+        // des entités en BDD.
+        // L'entity manager et Doctrine savent que l'entité correspond à la table article et que la propriété title
+        // correspond à la colonne title grâce aux annotations.
+        // L'entity manager sait comment faire correspondre mon instance d'entité à un enregistrement dans ma table
+        $entityManager->persist($article);
+        // -persist permet de pre-sauvegarder mes entités
+        // -flush éxecute la requête SQL dans ma BDD et du coup,
+        // -Création d'un enregistrement d'article dans la table
+        $entityManager->flush();
+        return new Response('OK');
 
     }
 }
+
 

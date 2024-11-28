@@ -17,3 +17,15 @@
     border: 1px solid black;
     border-radius: 2px;
 }
+
+.articles-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.category {
+    width: 50%;
+
+}
