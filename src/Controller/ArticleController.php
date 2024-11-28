@@ -25,9 +25,9 @@ class ArticleController extends AbstractController
     //je défini une url avec une varible id, cad que le router matchera toutes les urls
     //qui ont cette forme "/article/quelque chose", "article/5" numéro de l'article recherché
     #[Route('/showArticle/{id}', 'showArticle', requirements: ['id' => '\d'])]
-        public function article_show(int $id, ArticleRepository $articleRepository): Response
+    public function article_show(int $id, ArticleRepository $articleRepository): Response
     {
-            $articleFound = $articleRepository->find($id);
+        $articleFound = $articleRepository->find($id);
 
         if (!$articleFound) {
             return $this->redirectToRoute('not_found');
@@ -39,12 +39,14 @@ class ArticleController extends AbstractController
             'article' => $articleFound
         ]);
     }
+
     #[Route('/articles/search-results', 'article_search_results')]
-        // je peux utiliser le système d'instanciation automatiquement de Symfony
+    // je peux utiliser le système d'instanciation automatiquement de Symfony
         // du coup, je lui passe en paramètre le type de la méthode de la classe voulue
         // suivie d'une variable dans laquelle je veux que symfony stocke l'instance
         // de la classe. Ce mécanisme est appelé: "autowire"
-    public function articleSearchResults(Request $request) {
+    public function articleSearchResults(Request $request)
+    {
 
         $search = $request->query->get('search');
         return $this->render('article_search_results.html.twig', [
@@ -53,7 +55,8 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/create', 'article_create')]
-    public function createArticle(EntityManagerInterface $entityManager): Response {
+    public function createArticle(EntityManagerInterface $entityManager): Response
+    {
         // je créé une instance de l'entité Article, car c'est elle qui représente les articles dans mon application
         $article = new Article();
         // j'utilise les méthodes set pour remplir les propriétés de mon article
@@ -76,6 +79,7 @@ class ArticleController extends AbstractController
         $entityManager->flush();
         return $this->render('articles_list.html.twig');
     }
+
     #[Route('/articles/delete/{id}', 'delete_article', requirements: ['id' => '\d+'])]
     public function removeArticle(int $id, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
     {
@@ -86,7 +90,24 @@ class ArticleController extends AbstractController
 
         $entityManager->remove($article);
         $entityManager->flush();
-        return new Response('article deleted successfully');
+
+        return $this->render('article_delete.html.twig');
+    }
+
+    #[Route('/articles/update/{id}', 'update_article', requirements: ['id' => '\d+'])]
+    public function updateArticle(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        //je récupère mon article de la BDD par l'id
+        $article = $articleRepository->find($id);
+        //je modifie la valeur des propriétés title, content
+        $article->setTitle(title: 'Article 1 MAJ');
+        $article->setContent(content: 'contenu Article 1 MAJ');
+        //je pré-sauvegarde l'article, doctrine le MAJ
+        $entityManager->persist($article);
+        $entityManager->flush();
+        return $this->render('articles_update.html.twig', [
+            'article' => $article
+        ]);
     }
 }
 

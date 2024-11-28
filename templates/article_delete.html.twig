@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+
+{% block metatitle %}
+    {{ article.title }}  Article est supprimé
+{% endblock metatitle %}
+
+{% block main %}
+    <div>
+        <p>Enregistrement de la supression de "{{ article.title }}" :</p>
+    </div>
+{% endblock %}
