@@ -46,16 +46,17 @@ class CategoryController extends AbstractController
     public function createCategory(EntityManagerInterface $entityManager)
     {
         $category = new Category();
+
         // l'id est généré automatiquement par la BDD, du coup, inutile de le déclarer
         //je créais avec les setters les categories par le title et color
         $category->setTitle( 'category 1');
-        $category->setColor( 'green');
+        $category->setColor( 'red');
         //je pré-sauvegarde mes entity
         $entityManager->persist($category);
         //On réunit le tout pour l'afficher
         $entityManager->flush();
-        //et je le redirige vers la liste des catégories
-        return $this->redirectToRoute('categories_list');
+        //et je le redirige vers la liste des catégories pour plus de sens
+        return $this->redirectToRoute('categories_list.html.twig');
     }
 
 }

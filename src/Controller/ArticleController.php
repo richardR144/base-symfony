@@ -74,7 +74,7 @@ class ArticleController extends AbstractController
         // -flush éxecute la requête SQL dans ma BDD et du coup,
         // -Création d'un enregistrement d'article dans la table
         $entityManager->flush();
-        return new Response('OK');
+        return $this->render('articles_list.html.twig');
 
     }
 }
