@@ -75,7 +75,18 @@ class ArticleController extends AbstractController
         // -Création d'un enregistrement d'article dans la table
         $entityManager->flush();
         return $this->render('articles_list.html.twig');
+    }
+    #[Route('/articles/delete/{id}', 'delete_article', requirements: ['id' => '\d+'])]
+    public function removeArticle(int $id, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
+    {
+        $article = $articleRepository->find($id);
+        if (!$article) {
+            return $this->redirectToRoute('not_found');
+        }
 
+        $entityManager->remove($article);
+        $entityManager->flush();
+        return new Response('article deleted successfully');
     }
 }
 
