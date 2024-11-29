@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,18 +56,32 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/create', 'article_create')]
-    public function createArticle(EntityManagerInterface $entityManager): Response
+    public function createArticle(EntityManagerInterface $entityManager, Request $request): Response
     {
         // je créé une instance de l'entité Article, car c'est elle qui représente les articles dans mon application
         $article = new Article();
+        //dd("yep");
+        if ($request->isMethod('POST')) {
         // j'utilise les méthodes set pour remplir les propriétés de mon article
-        $article->setTitle(title: 'Article 2');
-        $article->setContent(content: 'contenu Article 2');
-        $article->setImage("https://cdn.futura-sciences.com/sources/images/dossier/773/01-intro-773.jpg");
-        $article->setCreatedAt(new \DateTime());
-        // La variable $article contient une instance de la classe Article avec les données voulues
-        //(sauf l'id car il sera généré par la BDD)
+            $article->setTitle(title: 'Article 2');
+            //contenu de l'article
+            $article->setContent(content: 'contenu Article 2');
+            //image de l'article
+            $article->setImage("https://cdn.futura-sciences.com/sources/images/dossier/773/01-intro-773.jpg");
+            //Attribution de la date de l'article
+            $article->setCreatedAt(new \DateTime());
 
+            //je récupère mes nouvelles valeurs via mon post
+            $newTitle = $request->request->get('title');
+            $newContent = $request->request->get('content');
+            $newImage = $request->request->get('image');
+
+            //Puis on rempli notre nouvel article avec les méthodes set de la classe Article
+            $article->setTitle($newTitle);
+            $article->setContent($newContent);
+            $article->setImage($newImage);
+            $article->setCreatedAt(new DateTime());
+        }
         // j'utilise l'instance de la classe EntityManager. C'est cette classe qui permet de sauver ou supprimer
         // des entités en BDD.
         // L'entity manager et Doctrine savent que l'entité correspond à la table article et que la propriété title
@@ -78,6 +93,9 @@ class ArticleController extends AbstractController
         // -Création d'un enregistrement d'article dans la table
         $entityManager->flush();
         return $this->render('articles_list.html.twig');
+
+        ////si j'ai pas de demande je renvoi juste mon nouvel article vide
+        //        return $this->render('article_create.html.twig', ['article' => $article]);
     }
 
     #[Route('/articles/delete/{id}', 'delete_article', requirements: ['id' => '\d+'])]
@@ -97,7 +115,7 @@ class ArticleController extends AbstractController
     #[Route('/articles/update/{id}', 'update_article', requirements: ['id' => '\d+'])]
     public function updateArticle(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
-        //je récupère mon article de la BDD par l'id
+        //je récupère mon article de la BDD par l'id que je veux mettre à jour
         $article = $articleRepository->find($id);
         //je modifie la valeur des propriétés title, content
         $article->setTitle(title: 'Article 1 MAJ');

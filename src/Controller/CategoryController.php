@@ -85,7 +85,7 @@ class CategoryController extends AbstractController
         if (!$categoryToUpdate) {
             return $this->redirectToRoute('not_found');
         }
-        //on changes les infos de notre catégorie
+        //je change les infos de notre catégorie
         $categoryToUpdate->setTitle('News');
         $entityManager->persist($categoryToUpdate);
         $entityManager->flush();
