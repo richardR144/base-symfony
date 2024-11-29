@@ -3,8 +3,8 @@ namespace App\Controller;
 
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,44 +58,26 @@ class ArticleController extends AbstractController
     #[Route('/articles/create', 'article_create')]
     public function createArticle(EntityManagerInterface $entityManager, Request $request): Response
     {
-        // je créé une instance de l'entité Article, car c'est elle qui représente les articles dans mon application
         $article = new Article();
-        //dd("yep");
-        if ($request->isMethod('POST')) {
-        // j'utilise les méthodes set pour remplir les propriétés de mon article
-            $article->setTitle(title: 'Article 2');
-            //contenu de l'article
-            $article->setContent(content: 'contenu Article 2');
-            //image de l'article
-            $article->setImage("https://cdn.futura-sciences.com/sources/images/dossier/773/01-intro-773.jpg");
-            //Attribution de la date de l'article
-            $article->setCreatedAt(new \DateTime());
+            //j'utilise la méthode createForm de l'abstractController pour générer un formulaire
+            //pour le nouvel article(ArticleType fait par "php bin/console make:form"
+        $form = $this->createForm(ArticleType::class, $article);
+            //je récupère les données de ma requête et ça les mets dans mon instance d'articles (handleReques
 
-            //je récupère mes nouvelles valeurs via mon post
-            $newTitle = $request->request->get('title');
-            $newContent = $request->request->get('content');
-            $newImage = $request->request->get('image');
+            $form->handleRequest($request);
+            //je vérifie que mes données ont été envoyé et validé
+            if ($form->isSubmitted() && $form->isValid()) {
+                //je ne veux pas que l'utilisateur choisisse de mettre sa date de creation
+                $article->setCreatedAt(new \DateTime());
+                //j'enregistre mon entité article
+                $entityManager->persist($article);
+                $entityManager->flush();
+            }
+                $formView = $form->createView();
 
-            //Puis on rempli notre nouvel article avec les méthodes set de la classe Article
-            $article->setTitle($newTitle);
-            $article->setContent($newContent);
-            $article->setImage($newImage);
-            $article->setCreatedAt(new DateTime());
-        }
-        // j'utilise l'instance de la classe EntityManager. C'est cette classe qui permet de sauver ou supprimer
-        // des entités en BDD.
-        // L'entity manager et Doctrine savent que l'entité correspond à la table article et que la propriété title
-        // correspond à la colonne title grâce aux annotations.
-        // L'entity manager sait comment faire correspondre mon instance d'entité à un enregistrement dans ma table
-        $entityManager->persist($article);
-        // -persist permet de pre-sauvegarder mes entités
-        // -flush éxecute la requête SQL dans ma BDD et du coup,
-        // -Création d'un enregistrement d'article dans la table
-        $entityManager->flush();
-        return $this->render('articles_list.html.twig');
-
-        ////si j'ai pas de demande je renvoi juste mon nouvel article vide
-        //        return $this->render('article_create.html.twig', ['article' => $article]);
+            return $this->render('article_create.html.twig', [
+                'formView' => $formView
+        ]);
     }
 
     #[Route('/articles/delete/{id}', 'delete_article', requirements: ['id' => '\d+'])]
@@ -112,19 +94,37 @@ class ArticleController extends AbstractController
         return $this->render('article_delete.html.twig');
     }
 
-    #[Route('/articles/update/{id}', 'update_article', requirements: ['id' => '\d+'])]
-    public function updateArticle(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/article/update/{id}', 'update_article',  ['id' => '\d+'])]
+    public function updateArticle(int $id, ArticleRepository $articleRepository, EntityManagerInterface $entityManager, Request $request)
     {
-        //je récupère mon article de la BDD par l'id que je veux mettre à jour
+       //j'instancie $article par id
         $article = $articleRepository->find($id);
-        //je modifie la valeur des propriétés title, content
-        $article->setTitle(title: 'Article 1 MAJ');
-        $article->setContent(content: 'contenu Article 1 MAJ');
-        //je pré-sauvegarde l'article, doctrine le MAJ
-        $entityManager->persist($article);
-        $entityManager->flush();
-        return $this->render('articles_update.html.twig', [
-            'article' => $article
+
+        $message = "Veuillez remplir les champs";
+
+
+        // si c'est une requête POST
+        if ($request->isMethod('POST')) {
+
+            $title = $request->request->get('title');
+            $content = $request->request->get('content');
+            $image = $request->request->get('image');
+            //Je modifie l'instance
+            $article->setTitle($title);
+            $article->setContent($content);
+            $article->setImage($image);
+
+            // je MAJ l'article en BDD
+            $entityManager->persist($article);
+            $entityManager->flush();
+            //je pose un message
+            $message = "L'article '" . $article->getTitle() . "' a bien été mis à jour";
+        }
+
+
+            return $this->render('article_update.html.twig', [
+                'article' => $article,
+                'message' => $message
         ]);
     }
 

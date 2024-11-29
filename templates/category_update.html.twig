@@ -5,8 +5,19 @@
 {% endblock metatitle%}
 
 {% block main %}
-        <article>
-            <p>La catégorie "{{ category.title }}" a été mise à jour avec succès</p>
-        </article>
+    <form method="post" action="{{ path('update_category', {id: category.id}) }}">
+
+        <label>Titre
+            <input name="title" type="text" value="{{ category.title }}" required/>
+        </label>
+
+        <label for="image">Image</label>
+        <input type="color" name="color">
+
+        <input type="submit">
+
+
+    </form>
+
 {% endblock main %}
 

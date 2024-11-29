@@ -4,7 +4,7 @@
     {% endblock metatitle %}
 
     {% block main %}
-        {{ dump(articles) }}
+
         <section class="articles-container">
             <h3>Il y a {{ articles | length }} articles actuellement</h3>
     {% for article in articles %}
